@@ -2,37 +2,107 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Laravel\Jetstream\Features;
+use App\Models\Team;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
+use App\Models\User;
+
 class UserFactory extends Factory
 {
     /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = User::class;
+    protected $table = 'users';
+
+    /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array
      */
-    public function definition(): array
+    public function definition()
     {
+        $filePath = 'public/images/avatars';
+        Storage::deleteDirectory($filePath);
+
+        // genera el nombre, prenombre y de ESTOS el eMail
+        $filePath2 = database_path('factories\\include_email.php');
+        include($filePath2);
+        dump($filePath, $email);
+
+        // $path=public_path('avatars');
+        // $path2=storage_path();
+        // $path2=public_path().'\\images\\';
+        // $avatar= $this->faker->image($path, 640, 480, null, false);
+
+        // $avatar = $this->faker->image(
+        //     $dir = Storage::path($filePath),
+        //     $width = 640,
+        //     $height = 480,
+        //     $category = getIniciales($prename . ' ' . $name), /* usado como texto sobre la imagen,default null */
+        //     $fullPath = true,
+        //     $randomize = true, // it's a no randomize images (default: `true`)
+        //     $word = null, //it's a filename without path
+        //     $gray = false,
+        //     $format = 'png'
+        // );
+
+        $avatar = $this->faker->imageUrl(640, 480, null, false);
+
+        // dd($avatar, $avatar1, public_path('avatars'));
+        // echo($avatar);
+        // TODO: registrar foto en directorio, no se queda, se borra sola inmediatamente
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $name . " " . $prename,
+            // 'prename' => $prename,
+            'email' => $email,
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'profile_photo_path' => $avatar,
+
+            'is_active' => $this->faker->boolean(),
+            // 'password' => Hash::make('password'),
+            'password' => 'password', // setPasswordAttribute
             'remember_token' => Str::random(10),
         ];
     }
 
     /**
      * Indicate that the model's email address should be unverified.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    public function unverified(): static
+    public function unverified()
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->state(function (array $attributes) {
+            return [
+                'email_verified_at' => null,
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the user should have a personal team.
+     *
+     * @return $this
+     */
+    public function withPersonalTeam()
+    {
+        if (!Features::hasTeamFeatures()) {
+            return $this->state([]);
+        }
+
+        return $this->has(
+            Team::factory()
+                ->state(function (array $attributes, User $user) {
+                    return ['name' => $user->name . '\'s Team', 'user_id' => $user->id, 'personal_team' => true];
+                }),
+            'ownedTeams'
+        );
     }
 }

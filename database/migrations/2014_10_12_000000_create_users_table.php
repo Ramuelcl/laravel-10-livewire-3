@@ -6,20 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    protected $table = 'users';
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+
+        Schema::disableForeignKeyConstraints();
+
+        Schema::create($this->table, function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('name', 32)->nullable()->default(null);
+            $table->string('email', 64)->unique()->nullable()->default(null);
+            $table->timestamp('email_verified_at')->nullable()->default(null);
+            $table->string('password', 32)->nullable()->default(null);
+            $table->rememberToken()->nullable()->default(null);
+            $table->string('profile_photo_path', 128)->nullable()->default(null);
             $table->timestamps();
         });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -27,6 +34,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::disableForeignKeyConstraints();
+
+        Schema::dropIfExists($this->table);
+
+        Schema::enableForeignKeyConstraints();
     }
 };
