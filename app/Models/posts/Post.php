@@ -52,7 +52,7 @@ class Post extends Model
     // relacion 1->n inversa
     public function categoria()
     {
-        return $this->belongsTo(\App\Models\backend\Categoria::class);
+        return $this->belongsTo(\App\Models\backend\Categoria::class, 'categoria_id');
     }
 
     // relacion n->n

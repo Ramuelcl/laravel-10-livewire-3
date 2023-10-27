@@ -1,12 +1,11 @@
 <div class="m-2">
-    Post
-    @if (config('constantes.LISTAR'))
+    Poste
+    @if ($ventana == $Listar)
         <div class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow rounded-lg p-2">
-            @foreach ($posts as $post)
-            @endforeach
+            <x-tablas :data="$posts" :td="$tableData" />
         </div>
-    @elseif(config('constantes.INGRESAR') || config('constantes.EDITAR'))
-        @if (config('constantes.INGRESAR'))
+    @elseif($ventana == $Ingresar || $ventana == $Editar)
+        @if ($ventana == $Ingresar)
             <div class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow rounded-lg p-2 mb-8">
                 <form wire:submit="fncSave()">
                     <div class="mb-4">
@@ -62,10 +61,8 @@
                     </div>
                 </form>
             </div>
-        @elseif(config('constantes.EDITAR'))
-            //
+        @elseif($ventana == $Editar)
         @endif
-    @elseif(config('constantes.ELIMINAR'))
-        //
+    @elseif($ventana == $Eliminar)
     @endif
 </div>
