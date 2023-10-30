@@ -1,11 +1,12 @@
-<!-- views/components/tablas.blade.php -->
 @props(['data', 'td'])
+<!-- views/components/tablas.blade.php -->
 {{-- @dd($td); --}}
 
 <table class="table-auto w-full">
-    <div class="flex justify-end">
-        @if ($td['agregar'])
-            <x-button rounded primary label="Agregar" icon="plus" />
+    <div class="flex justify-between">
+        {{ $td['txtTitulo'] }}
+        @if ($td['btnAgregar'])
+            <x-button rounded primary label="Agregar" icon="plus" wire:click="fncOpciones(1)" />
         @endif
     </div>
     <thead class="border-b-2 border-cyan-500">
@@ -20,13 +21,17 @@
         @foreach ($data as $row)
             <tr>
                 @foreach ($td['campos'] as $columnName)
-                    <td>{{ $this->getColumnValue($row, $columnName) }}</td>
+                    <td wire:key="{{ $td['azar'] }}-{{ $row->id }}">
+                        {{ $this->getColumnValue($row, $columnName) }}
+                    </td>
                 @endforeach
-                @if ($td['editar'])
-                    <td><x-button rounded positive label="Editar" icon="pencil" /></td>
+                @if ($td['btnEditar'])
+                    <td><x-button rounded positive label="Editar" icon="pencil"
+                            wire:click="fncOpciones(2, {{ $row }})" /></td>
                 @endif
-                @if ($td['eliminar'])
-                    <td><x-button rounded negative label="Eliminar" icon="minus" /></td>
+                @if ($td['btnEliminar'])
+                    <td><x-button rounded negative label="Eliminar" icon="minus"
+                            wire:click="fncOpciones(3, {{ $row }})" /></td>
                 @endif
             </tr>
         @endforeach

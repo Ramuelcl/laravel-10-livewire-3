@@ -1,68 +1,59 @@
+<!-- resources\views\livewire\post\live-formulario.blade.php -->
 <div class="m-2">
-    Poste
-    @if ($ventana == $Listar)
-        <div class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow rounded-lg p-2">
-            <x-tablas :data="$posts" :td="$tableData" />
-        </div>
-    @elseif($ventana == $Ingresar || $ventana == $Editar)
-        @if ($ventana == $Ingresar)
-            <div class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow rounded-lg p-2 mb-8">
-                <form wire:submit="fncSave()">
+
+    <div class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow rounded-lg p-2">
+        <x-tablas :data="$posts" :td="$tableData" />
+    </div>
+
+    {{-- <div class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow rounded-lg p-2 mb-8">
+             @dump(['ventana' => $ventana, 'txtTitulo' => $txtTitulo]) --}}
+    @if ($ventana > 0)
+        <x-modal2 name="miModal" show="{{ $show }}">
+            {{ $txtTitulo }}
+            <form wire:submit="fncSave()" class="border-b-4">
+                <fieldset {{ $ventana === 3 ? 'disabled' : '' }}>
+
                     <div class="mb-4">
-                        <x-input-label>Título</x-input-label>
-                        <x-text-input class="w-full" wire:model="titulo" required></x-text-input>
-                        <x-input wire:model="titulo" label="Título" placeholder="título del Post" required />
+                        <x-input wire:model="titulo" label="Título" placeholder="título del Post" />
                     </div>
                     <div class="mb-4">
                         <x-input-label>Contenido</x-input-label>
-                        <x-textarea class="w-full" wire:model="contenido" required></x-textarea>
+                        <x-textarea class="w-full" wire:model="contenido"></x-textarea>
                     </div>
                     <div class="mb-4 hidden">
                         <x-input-label>Imagen</x-input-label>
-                        <x-text-input class="w-full" wire:model="imagen" disabled></x-text-input>
+                        <x-input class="w-full" wire:model="image_path" disabled></x-input>
                     </div>
                     <div class="flex justify-between gap-4">
                         <div class="mb-4 w-1/2">
                             <x-input-label>Categoría</x-input-label>
-                            <x-select class="w-full" wire:model="categoria_id">
-                                @foreach ($categorias as $categoria)
-                                    <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+                            <x-select1 class="w-full" wire:model="categoria_id">
+                                @foreach ($categorias as $categoria0)
+                                    {{-- @dd($categoria0) --}}
+                                    <option value="{{ $categoria0->id }}">{{ $categoria0->nombre }}</option>
                                 @endforeach
-                            </x-select>
+                            </x-select1>
                         </div>
                         <div class="mb-4 w-1/2">
                             <x-input-label>Marcadores</x-input-label>
-                            <x-selectMultiple class="w-full" wire:model="selectedMarcadores">
+                            <x-select1 :multiple="true" class="w-full" wire:model="selectedMarcadores">
                                 @foreach ($marcadores as $marcador)
                                     <option value="{{ $marcador->id }}" style="background-color:{{ $marcador->hexa }}">
                                         {{ $marcador->nombre }}
                                     </option>
                                 @endforeach
-                            </x-selectMultiple>
+                            </x-select1>
                         </div>
+
                     </div>
-                    {{-- <div class="mb-4">
-                <x-input-label>Marcadores</x-input-label>
-                <ul>
-                    @foreach ($marcadores as $marcador)
-                        <li>
-                            <label>
-                                <x-checkbox name="marcadores[]" value="{{ $marcador->id }}">
-                                    <span class="ml-2"> {{ $marcador->nombre }}</span>
-                                </x-checkbox>
-                            </label>
-                        </li>
-                    @endforeach
-                </ul>
-            </div> --}}
-                    <hr>
-                    <div class="flex justify-end">
-                        <x-primary-button>Crear</x-primary-button>
-                    </div>
-                </form>
-            </div>
-        @elseif($ventana == $Editar)
-        @endif
-    @elseif($ventana == $Eliminar)
+                </fieldset>
+                <div class="flex justify-end border-t-4">
+                    <x-secondary-button wire:click="$set('show', false)" class="mx-6">Cancelar</x-secondary-button>
+
+                    <x-primary-button color="red"
+                        wire:click="fncSave({{ $ventana === 1 ? 0 : $post->id }})">{{ ($ventana === 1 ? 'Crear' : $ventana === 2) ? 'Editar' : 'Eliminar' }}</x-primary-button>
+                </div>
+            </form>
+        </x-modal2>
     @endif
 </div>

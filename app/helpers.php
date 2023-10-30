@@ -9,6 +9,15 @@
  */
 
 //
+if (!function_exists('fncCadenaAlfabeticaAleatoria')) {
+    function fncCadenaAlfabeticaAleatoria($longitud = 6)
+    {
+        $alfabeto = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $cadenaAleatoria = substr(str_shuffle($alfabeto), 0, $longitud);
+        return $cadenaAleatoria;
+    }
+}
+//
 if (!function_exists('fncCan')) {
     function fncCan(string $permission): void
     {
