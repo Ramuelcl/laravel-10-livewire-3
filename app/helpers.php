@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Storage;
+
 /** archivo: app/helpers.php
  * Modifica tu archivo composer.json para agregar la carga del archivo con la clave files dentro de la sección autoload de la siguiente manera:
  * "files": [
@@ -7,6 +9,25 @@
  * ]
  * ejecutar: composer dump-autoload
  */
+
+if (!function_exists('fncCrearDirectorio')) {
+    function fncCrearDirectorio($path = null, $storage = 'public')
+    {
+        // Verifica si se proporcionó un nombre de directorio
+        if (!$path) {
+            // Genera un nombre de directorio único (por ejemplo, basado en la fecha y hora)
+            $path = 'dir_' . now()->format('Ymd_His');
+        }
+        // Verifica si el directorio ya existe
+        if (Storage::disk($storage)->exists($path)) {
+            return "El directorio '$path' ya existe en la ubicación '$storage'.";
+        }
+        // Crea el directorio en la ubicación especificada
+        Storage::disk($storage)->makeDirectory($path);
+
+        return "Se ha creado el directorio '$path' en la ubicación '$storage'.";
+    }
+}
 
 //
 if (!function_exists('fncCadenaAlfabeticaAleatoria')) {

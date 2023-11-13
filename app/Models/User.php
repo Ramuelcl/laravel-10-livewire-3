@@ -76,8 +76,9 @@ class User extends Authenticatable
         $name = $this->attributes['profile_photo_path'] ? $this->attributes['profile_photo_path'] : 'images/avatars/default.png';
         return $name;
     }
-    public function scopeActive($query)
+    public function scopeIs_active($query)
     {
+        // dd($query);
         return $query->where('is_active', 1);
     }
     // rol incrustado en la tabla user
