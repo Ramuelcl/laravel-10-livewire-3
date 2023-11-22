@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Livewire\Backend;
+namespace App\Livewire\Backend\Users;
 
-use App\Models\User;
 use Livewire\Component;
-//
 use Livewire\WithFileUploads;
 
-class LiveUsers extends Component
+class LiveForms extends Component
 {
     use WithFileUploads;
 
@@ -15,14 +13,12 @@ class LiveUsers extends Component
     public $users;
     public $name, $email, $password, $profile_photo_path, $is_active;
 
-    protected $listeners = ['searchApplied', 'activeApplied'];
-
     public function render()
     {
-        return view('livewire.backend.live-users'); //, ['users' => $this->users]
+        return view('livewire.backend.users.live-forms');
     }
 
-    public function fncGuardar()
+    public function fncGuardar($opcion = 1) // 1=nuevo, 2=edicion, 3=eliminacion
     {
         // sleep(20);
         $validate = $this->validate([
@@ -64,13 +60,43 @@ class LiveUsers extends Component
             // dd($paso, $file, $path);
         }
 
-        User::create([
+        $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => bcrypt($this->password),
             'profile_photo_path' => $path . $file,
             'is_active' => $this->is_active,
         ])->save();
-        session()->flash('messages', 'usuario creado satisfactoriamente');
+
+        session()->flash('messages', "usuario " . $opcion == 1 ? 'creado' : 'editado' . " satisfactoriamente");
+
+        $this->fncLimpiaTodo();
+
+        $this->event('eventList');
+    }
+
+    public function fncLimpiaTodo()
+    {
+        $this->fncLimpiaCampos();
+        $this->reset(['name', 'email', 'password', 'profile_photo_path', 'is_active']);
+    }
+    public function fncLimpiaCampos()
+    {
+        $this->reset(['name', 'email', 'password', 'profile_photo_path', 'is_active']);
+    }
+    public function getAccess(User $user, $action = 1) //1=access, 2=create, 3=read, 4=update, 5=delete, 6=publish, 7=unpublish, 8=printer, 9=export
+    {
+        // dump($user);
+        $return = false;
+        if ($this->user->hasRole('admin') || $this->user->hasRole('super-admin')) {
+            $return = true;
+        } else {
+            // Datos específicos para otros roles (por ejemplo, usuarios normales)
+            $return = ($user === $this->user_id_in) ? true : false;
+        }
+
+        // dump($user, $this->user_id_in);
+        // Obtener datos para otros roles
+        return $return;
     }
 }

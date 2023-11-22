@@ -248,4 +248,26 @@ return [
             ],
         ],
     ],
+    'tabs-users' => [
+        [
+            'title' => 'Listado',
+            'sufix' => 'tab-listado',
+            'component' => 'live-list',
+        ],
+        [
+            'title' => 'Usuario',
+            'sufix' => 'tab-usuario',
+            'component' => 'live-form',
+        ],
+        [
+            'title' => 'Roles',
+            'sufix' => 'tab-roles',
+            'component' => 'live-list',
+        ],
+        [
+            'title' => 'Permisos',
+            'sufix' => 'tab-permisos',
+            'component' => 'live-form',
+        ],
+    ],
 ];

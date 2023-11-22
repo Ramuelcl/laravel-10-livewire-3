@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
                 'email' => 'guest@email.com',
                 'profile_photo_path' => 'images/avatars/guest.png',
                 'email_verified_at' => now(),
-                'password' => 'guest', //bcrypt('guest')
+                'password' => bcrypt('guest'),
                 'remember_token' => Str::random(10),
                 // 'role' => 'guest',
                 'is_active' => 1,
@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
                 'email' => 'ramuelcl@gmail.com',
                 'profile_photo_path' => 'images/avatars/admin.png',
                 'email_verified_at' => now(),
-                'password' => '1Ramuel', //bcrypt('guest')
+                'password' => bcrypt('ramuel'),
                 'remember_token' => Str::random(10),
                 // 'role' => 'guest',
                 'is_active' => 1,

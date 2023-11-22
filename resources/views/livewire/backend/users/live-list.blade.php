@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.30s>
     <div class="flex justify-between">
         <!-- list pages -->
         @if ($onPag)
@@ -15,13 +15,7 @@
         @endif
         <!-- Search input -->
         @if ($onSearch)
-            <div class="relative m-[2px] mb-3 mr-5 float-left w-1/3">
-                <label for="search" class="sr-only">Search </label>
-                {{-- {{ $search }} --}}
-                <x-input wire:model.live="search" id="search" type="search" placeholder="Search..." icon="search"
-                    class="block w-64 rounded-lg border dark:border-none dark:bg-neutral-600 py-2 pl-10 pr-4 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
-
-            </div>
+            @livewire('live-search')
         @endif
         <!-- select only actives -->
         @if ($onActive)
@@ -54,14 +48,14 @@
                     Imagen
                 </th>
                 <th scope="col" class="px-2 py-1 border-x dark:border-neutral-600">
-                    Acciones
+                    Opciones
                 </th>
             </tr>
         </thead>
 
         <!-- Table body -->
         <tbody>
-            @foreach ($users as $user)
+            @foreach ($this->users as $user)
                 <tr class="border-b dark:border-neutral-600">
                     <th scope="row" class="px-2 py-2 border-x dark:border-neutral-600">
                         {{ $user->id }}
@@ -74,11 +68,18 @@
                         {{ $user->is_active ? 'Si' : 'No' }}
                     </td>
                     <td class="px-2 py-2 border-x dark:border-neutral-600">
-                        <img src="{{ Storage::url('public/' . $user->profile_photo_path) }}" class="w-5">
+                        @if (Storage::exists('public/' . $user->profile_photo_path))
+                            <img src="{{ Storage::url('public/' . $user->profile_photo_path) }}" class="w-5">
+                        @else
+                            <img src="{{ Storage::url('public/images/avatars/default.png') }}" class="w-5">
+                        @endif
                     </td>
                     <td>
-                        <x-button primary>Editar</x-button>
-                        <x-button secondary>Eliminar</x-button>
+                        <x-button rounded positive label="Editar" icon="pencil"
+                            wire:click="fncOpciones(2, {{ $user }})" :disabled="$this->getAccess($user)" />
+
+                        <x-button rounded negative label="Eliminar" icon="minus"
+                            wire:click="fncOpciones(3, {{ $user }})" :disabled="$this->getAccess($user)" />
                     </td>
                 </tr>
             @endforeach
@@ -89,34 +90,10 @@
         <tfoot class="border-t-2 dark:border-neutral-600">
             <tr>
                 <td></td>
-                <td class="px-6 py-2 border-x dark:border-neutral-600">Usuarios:
-                    {{ $this->totalUsuarios() }}
+                <td class="px-6 py-2 border-x dark:border-neutral-600">{{ $this->users->links() }}
                 </td>
             </tr>
         </tfoot>
 
     </table>
-    {{-- {{ $this->users->links() }} --}}
-    <nav class="mt-5 flex items-center justify-between text-sm" aria-label="Page navigation example">
-        <p>
-            Showing <strong>1-{{ $this->xPag }}</strong> of <strong>{{ $this->totalUsuarios() }}</strong>
-        </p>
-
-        <ul class="list-style-none flex">
-            <li>
-                <a class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-                    href="#!">
-                    Previous
-                </a>
-            </li>
-
-            <li>
-                <a class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-                    href="#!">
-                    Next
-                </a>
-            </li>
-        </ul>
-    </nav>
-
 </div>
