@@ -8,7 +8,7 @@ use Livewire\Component;
 class LiveUsers extends Component
 {
 
-    protected $listeners = ['searchApplied', 'is_activeApplied', 'TabUserApplied' => 'TabUserApplied'];
+    protected $listeners = ['searchApplied', 'is_activeApplied', 'TabUserApplied'];
     public $tabs, $activeTab = 0;
 
     public function mount()

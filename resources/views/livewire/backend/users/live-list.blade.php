@@ -24,6 +24,10 @@
                 <x-checkbox wire:model.live="chkActivos" label="Activos ?" />
             </div>
         @endif
+        <!-- select only actives -->
+        @if ($onAgregar)
+            <x-button rounded primary label="Agregar" icon="plus" wire:click="{{ $this->alternarVentana(1) }}" />
+        @endif
     </div>
 
     <!-- Table -->

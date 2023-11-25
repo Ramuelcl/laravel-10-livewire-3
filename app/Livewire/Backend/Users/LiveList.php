@@ -15,17 +15,25 @@ class LiveList extends Component
 {
     use WithPagination;
 
-    public $onSearch, $search = '', $onActive, $chkActivos;
+    public $onSearch, $search = '', $onActive, $chkActivos, $onAgregar;
     public $onPag, $xPags = [5, 10, 25, 50], $xPag = 5;
     public $sortField = 'id', $sortDir = 'desc';
-
+    public $tabs, $tab = 0;
     // public $users;
 
-    public function mount($onSearch = true, $onActive = true, $onPag = true)
+    public function mount($onSearch = true, $onActive = true, $onPag = true, $onAgregar = true)
     {
         $this->onSearch = $onSearch;
         $this->onActive = $onActive;
         $this->onPag = $onPag;
+        $this->onAgregar = $onAgregar;
+    }
+
+    #[On('agregarApplied')]
+    public function btnAgregar($tab)
+    {
+        // dd($tab);
+        $this->tab = $tab;
     }
 
     #[On('searchApplied')]
@@ -121,6 +129,10 @@ class LiveList extends Component
         }
     }
 
+    public function alternarVentana($tab = 0)
+    {
+        $this->dispatch('TabUserApplied', $tab);
+    }
     public function hydrate()
     {
         //
