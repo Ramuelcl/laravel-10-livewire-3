@@ -28,7 +28,7 @@ class LiveUsers extends Component
 
     public function TabUserApplied($index)
     {
-        dump(['LiveUsers' => $index]);
+        // dump(['LiveUsers' => $index]);
         $this->activeTab = $index;
     }
 }
