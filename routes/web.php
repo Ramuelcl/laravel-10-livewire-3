@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\PropertyController;
+use App\Http\Controllers\Admin\OptionController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
         Route::resource('property', PropertyController::class);
+        Route::resource('option', OptionController::class);
     });
 
 // Route::controller(PrincipalController::class)

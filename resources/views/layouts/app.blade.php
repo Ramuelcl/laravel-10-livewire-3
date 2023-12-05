@@ -90,7 +90,19 @@
         <!-- Page Content -->
         <main class="p-4">
             @if (session('success'))
-                <div class="alert-success">{{ session('success') }}</div>
+                <div class="bg-green-300 w-full text-center items-center px-4 py-2 mt-2 rounded-md">
+                    {{ session('success') }}</div>
+            @endif
+
+            @if ($errors->any())
+                <div class="bg-red-300 w-full text-center items-center px-4 py-2 mt-2 rounded-md border border-red-800">
+                    <ul class="">
+                        @foreach ($errors->all() as $error)
+                            <li>* {{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    {{ session('success') }}
+                </div>
             @endif
             {{ $slot }}
         </main>

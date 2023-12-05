@@ -33,14 +33,7 @@
             <x-tw_checkbox name='sold' label="Vendu" value="{{ $property->sold }}" class="mt-2" />
         </fieldset>
         <div>
-            <button type="submit"
-                class="bg-green-700 rounded-md px-2 py-1 text-gray-100 focus:bg-green-300 focus:text-gray-700">
-                @if ($property->exists)
-                    {{ __('Update') }}
-                @else
-                    {{ __('Save') }}
-                @endif
-            </button>
+            <x-tw_button text="{{ $property->exists ? __('Update') : __('Save') }}" bgColor="green" />
         </div>
     </form>
 </x-app-layout>

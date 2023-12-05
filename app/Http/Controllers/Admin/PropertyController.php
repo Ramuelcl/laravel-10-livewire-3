@@ -15,7 +15,7 @@ class PropertyController extends Controller
     public function index()
     {
         return view('admin.properties.index', [
-            'properties' => Property::orderBy('created_at', 'desc')->paginate(25),
+            'properties' => Property::orderBy('created_at', 'desc')->paginate(5),
         ]);
     }
 
@@ -71,7 +71,7 @@ class PropertyController extends Controller
      */
     public function update(PropertyFormRequest $request, Property $property)
     {
-        $property->update($request->validate());
+        $property->update($request->validated());
         return redirect()
             ->route('admin.property.index')
             ->with('success', 'le bien a bien été modifié');
