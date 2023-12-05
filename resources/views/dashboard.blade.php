@@ -11,7 +11,6 @@
                 {{-- @livewire('post.live-post')
                 @livewire('post.live-post', ['titulo' => 'Posteos', Auth::user()])
                 Fuera del componente --}}
-
                 @livewire('post.live-formulario')
 
             </div>

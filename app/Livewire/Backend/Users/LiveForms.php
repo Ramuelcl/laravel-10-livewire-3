@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Backend\Users;
 
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -12,6 +13,10 @@ class LiveForms extends Component
     //
     public $users;
     public $name, $email, $password, $profile_photo_path, $is_active;
+
+    public function mount()
+    {
+    }
 
     public function render()
     {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PropertyController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,13 @@ Route::get('/linkstorage', function () {
     $linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/storage';
     dump($targetFolder, $linkFolder);
 });
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::resource('property', PropertyController::class);
+    });
+
 // Route::controller(PrincipalController::class)
 //     ->prefix('')
 //     ->as('')

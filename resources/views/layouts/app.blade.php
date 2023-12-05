@@ -89,6 +89,9 @@
 
         <!-- Page Content -->
         <main class="p-4">
+            @if (session('success'))
+                <div class="alert-success">{{ session('success') }}</div>
+            @endif
             {{ $slot }}
         </main>
         <footer class="flex flex-col items-center space-y-4 py-10 md:flex-row  md:justify-between mx-auto md:space-y-0">

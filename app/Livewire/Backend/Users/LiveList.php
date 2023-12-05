@@ -129,9 +129,11 @@ class LiveList extends Component
         }
     }
 
-    public function alternarVentana($tab = 0)
+    public function TabForm($accion = '1')
     {
-        $this->dispatch('TabUserApplied', $tab);
+        $tab = '#usuarios';
+
+        $this->dispatch('TabUserApplied', $tab, $accion);
     }
     public function hydrate()
     {

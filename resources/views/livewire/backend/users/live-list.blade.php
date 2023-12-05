@@ -26,7 +26,7 @@
         @endif
         <!-- select only actives -->
         @if ($onAgregar)
-            <x-button rounded primary label="Agregar" icon="plus" wire:click="{{ $this->alternarVentana(1) }}" />
+            <x-button rounded primary label="Agregar" icon="plus" wire:click="{{ $this->TabForm(1) }}" />
         @endif
     </div>
 

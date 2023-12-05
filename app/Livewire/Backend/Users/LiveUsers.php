@@ -15,20 +15,20 @@ class LiveUsers extends Component
     {
         $this->tabs = config('app_settings.tabs-users');
         // dd($this->tabs);
+        $this->activeTab = '#listado';
     }
 
     public function render()
     {
-        // return view('livewire.backend.users.live-users'); //, ['users' => $this->users]
         return view('livewire.backend.users.live-users', [
             'tabs' => $this->tabs,
             'activeTab' => $this->activeTab,
         ]);
     }
 
-    public function TabUserApplied($index)
+    public function TabUserApplied($tab = '#listado', $accion)
     {
-        // dump(['LiveUsers' => $index]);
-        $this->activeTab = $index;
+        dump(['LiveUsers' => $tab, 'accion' => $accion]);
+        $this->activeTab = $tab;
     }
 }
