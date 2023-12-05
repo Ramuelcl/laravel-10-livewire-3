@@ -9,22 +9,24 @@
         @csrf
         @method($property->exists ? 'PUT' : 'POST')
         <fieldset class="border-2 border-spacing-2 rounded-md p-4">
-            <x-tw_input name='title' label="Titre" value="{{ $property->title }}" align="left" />
+            <div class="columns-2 align-top items-center">
+                <x-tw_input name='title' label="Titre" value="{{ $property->title }}" align="left" />
+                <div class="columns-2 gap-2">
+                    <x-tw_input name='surface' label="Surface" value="{{ $property->surface }}" />
+                    <x-tw_input name='price' label="Prix" value="{{ $property->price }}" />
+                </div>
+            </div>
             <x-tw_input name='description' label="Description" value="{{ $property->description }}" type="textarea"
                 width="w-full" align="left" />
-            <div class="flex flex-row gap-4">
-                <x-tw_input name='surface' label="Surface" value="{{ $property->surface }}" />
-                <x-tw_input name='price' label="Prix" value="{{ $property->price }}" />
-            </div>
 
-            <div class="flex flex-row gap-4">
-                <x-tw_input name='rooms' label="Pieces" value="{{ $property->rooms }}" class="w-1/2" />
+            <div class="columns-3 items-center">
+                <x-tw_input name='rooms' label="Pieces" value="{{ $property->rooms }}" />
                 <x-tw_input name='bedrooms' label="Chambres" value="{{ $property->bedrooms }}" />
                 <x-tw_input name='floor' label="Etages" value="{{ $property->floor }}" />
             </div>
 
-            <div class="flex flex-row gap-4">
-                <x-tw_input name='address' label="Address" value="{{ $property->address }}" class="col" />
+            <div class="columns-3 items-center">
+                <x-tw_input name='address' label="Address" value="{{ $property->address }}" />
                 <x-tw_input name='city' label="Ville" value="{{ $property->city }}" />
                 <x-tw_input name='postal_code' label="Postale Code" value="{{ $property->postal_code }}" />
             </div>

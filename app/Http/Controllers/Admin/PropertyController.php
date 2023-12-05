@@ -34,7 +34,7 @@ class PropertyController extends Controller
             'postal_code' => 75000,
             'sold' => false,
         ]);
-        return view('admin.properties.form', ['property' => new Property()]);
+        return view('admin.properties.form', ['property' => $property]);
     }
 
     /**

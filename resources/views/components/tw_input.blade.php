@@ -7,10 +7,12 @@
     'value' => '',
     'class' => '',
     'classFix' =>
-        'border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-md',
+        'form-control border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-md',
+    // 'classFix' =>
+    //     'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
     'align' => 'top',
     'width' => '',
-    'contentClasses' => 'py-1 bg-white dark:bg-gray-700',
+    'contentClasses' => 'py-1 bg-gray-100 dark:bg-gray-700',
 ])
 @php
     switch ($align) {
@@ -52,6 +54,7 @@
                         $class,
                         $classFix,
                         $width,
+                        $contentClasses,
                         "form-input peer @error($name) peer-invalid @enderror",
                     ])>{{ old($name, $value) }}
                     </textarea>
@@ -62,7 +65,8 @@
                         $class,
                         $classFix,
                         $width,
-                        "form-input peer @error($name) is-invalid @enderror",
+                        $contentClasses,
+                        "@error($name) peer-invalid @enderror",
                     ])>
             @endif
             <x-tw_error name="{{ $name }}" class="{{ $align == 'left' ? '' : 'pl-2' }}"></x-tw_error>
