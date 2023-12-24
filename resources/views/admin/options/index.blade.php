@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="flex justify-between text-center">
+    <div class="alert flex justify-between text-center">
         <h1 class="text-2xl">
             {{ __('Toutes les Options') }}
         </h1>
@@ -27,8 +27,7 @@
                                 <form action="{{ route('admin.option.destroy', $option) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <x-tw_button bgColor="red" text="{{ __('Delete') }}" />
-
+                                    <x-tw_button bgColor="red" type="submit">{{ __('Delete') }}</x-tw_button>
                                 </form>
                             </div>
                         </td>

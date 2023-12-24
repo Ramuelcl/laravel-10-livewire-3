@@ -6,14 +6,15 @@
     'type' => 'text',
     'value' => '',
     'class' => '',
-    'classFix' =>
-        'form-control border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-md',
+    'classFix' => @include 'tw_classFix',
+    // 'border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-md',
     // 'classFix' =>
     //     'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
     'align' => 'top',
     'width' => '',
     'contentClasses' => 'py-1 bg-gray-100 dark:bg-gray-700',
 ])
+{{-- resources\views\components\tw_input.blade.php --}}
 @php
     switch ($align) {
         case 'left':
@@ -26,13 +27,13 @@
 
     switch ($width) {
         case '25':
-            $width = 'w-1/3';
+            $width = 'w-12';
             break;
         case '50':
-            $width = 'w-1/2';
+            $width = 'w-32';
             break;
         case '75':
-            $width = 'w-3/4';
+            $width = 'w-64';
             break;
         default:
             $width = 'w-full';
@@ -49,8 +50,8 @@
                     class="{{ $align == 'left' ? '' : 'pl-2' }}" />
             @endif
             @if ($type === 'textarea')
-                <textarea id="{{ $name }}" name="{{ $name }}" {{ $disabled ?? 'disabled' }}
-                    placeholder="{{ $placeholder }}" @class([
+                <textarea id="{{ $name }}" name="{{ $name }}" wire:model.live="{{ $name }}"
+                    {{ $disabled ?? 'disabled' }} placeholder="{{ $placeholder }}" @class([
                         $class,
                         $classFix,
                         $width,
@@ -59,9 +60,9 @@
                     ])>{{ old($name, $value) }}
                     </textarea>
             @else
-                <input id="{{ $name }}" name="{{ $name }}" type="{{ $type }}"
-                    {{ $disabled ?? 'disabled' }} value="{{ old($name, $value) }}" placeholder="{{ $placeholder }}"
-                    @class([
+                <input id="{{ $name }}" name="{{ $name }}" wire:model="{{ $name }}"
+                    type="{{ $type }}" {{ $disabled ?? 'disabled' }} value="{{ old($name, $value) }}"
+                    placeholder="{{ $placeholder }}" @class([
                         $class,
                         $classFix,
                         $width,

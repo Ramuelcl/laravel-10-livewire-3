@@ -33,6 +33,7 @@ class PropertyFormRequest extends FormRequest
             'address' => ['required', 'min:8'],
             'postal_code' => ['required', 'min:5'],
             'sold' => ['required', 'boolean'],
+            'opttions' => ['array', 'exists:options,id'],
         ];
     }
 
@@ -84,6 +85,7 @@ class PropertyFormRequest extends FormRequest
             'address' => 'direccion',
             'postal_code' => 'código postal',
             'sold' => 'vendido',
+            'options' => 'Opciones',
             // Agrega más nombres de campo personalizados aquí
         ];
     }

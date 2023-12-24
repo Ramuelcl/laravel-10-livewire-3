@@ -35,8 +35,7 @@
                                 <form action="{{ route('admin.property.destroy', $property) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <x-tw_button bgColor="red" text="{{ __('Delete') }}" />
-
+                                    <x-tw_button bgColor="red" type="submit">{{ __('Delete') }}</x-tw_button>
                                 </form>
                             </div>
                         </td>

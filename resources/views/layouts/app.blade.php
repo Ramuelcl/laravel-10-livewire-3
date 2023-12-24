@@ -6,22 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'GuzaNet') }}</title>
+    {{-- Tom Select para que en combobox se despliegue los datos seleccionados y otros --}}
+    {{-- <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script> --}}
+    {{-- Tom Select --}}
+    {{-- Pico CSS --}}
+    {{-- <link rel="stylesheet" href="css/pico.min.css"> --}}
+    {{-- Pico CSS --}}
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="//unpkg.com/alpinejs" defer></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js']) {{-- , 'resources/css/pico.min.css' --}}
+    {{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 
     <!-- Styles -->
     @livewireStyles
     @wireUiScripts
 </head>
 
-<body class="font-sans antialiased bg-gray-100 dark:bg-gray-900 max-w-6xl mx-auto">
+<body class="font-sans antialiased bg-gray-100 dark:bg-gray-900 max-w-7xl mx-auto">
     <header class="bg-gray-50 dark:bg-gray-900 shadow px-6">
         <div class="flex justify-between h-16 items-center">
             <!-- boton menu -->
@@ -83,27 +91,24 @@
                 class="block px-3 py-2 rounded-md transition-colors text-slate-700 hover:bg-sky-500 hover:text-gray-100">Contact</a>
         </div>
     </header>
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div class="flex flex-wrap min-h-screen bg-gray-100 dark:bg-gray-900">
         <!-- Page Heading -->
         <livewire:layout.navigation />
 
         <!-- Page Content -->
         <main class="p-4">
-            @if (session('success'))
-                <div class="bg-green-300 w-full text-center items-center px-4 py-2 mt-2 rounded-md">
-                    {{ session('success') }}</div>
-            @endif
+            <x-tw_flash />
 
             @if ($errors->any())
                 <div class="bg-red-300 w-full text-center items-center px-4 py-2 mt-2 rounded-md border border-red-800">
-                    <ul class="">
+                    <x-tw_alert type="danger" class="border-none">
                         @foreach ($errors->all() as $error)
-                            <li>* {{ $error }}</li>
+                            <li>{{ $error }}</li>
                         @endforeach
-                    </ul>
-                    {{ session('success') }}
+                    </x-tw_alert>
                 </div>
             @endif
+
             {{ $slot }}
         </main>
         <footer class="flex flex-col items-center space-y-4 py-10 md:flex-row  md:justify-between mx-auto md:space-y-0">
@@ -147,6 +152,16 @@
     <script src="resources/js/app.js"></script>
 
     @livewireScripts
+
+    <script>
+        new TomSelect('select[multiple]', {
+            plugins: {
+                remove_button: {
+                    title: 'Supprimer'
+                }
+            }
+        })
+    </script>
 </body>
 
 </html>

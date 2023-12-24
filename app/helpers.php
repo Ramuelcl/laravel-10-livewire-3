@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 /** archivo: app/helpers.php
  * Modifica tu archivo composer.json para agregar la carga del archivo con la clave files dentro de la sección autoload de la siguiente manera:
@@ -42,7 +43,11 @@ if (!function_exists('fncCadenaAlfabeticaAleatoria')) {
 if (!function_exists('fncCan')) {
     function fncCan(string $permission): void
     {
-        if (!auth()->user()->can($permission)) {
+        if (
+            !auth()
+                ->user()
+                ->can($permission)
+        ) {
             abort(403, 'No se tienen los permisos requeridos');
         }
     }
@@ -51,7 +56,9 @@ if (!function_exists('fncHasPermissions')) {
     function fncHasPermissions(array $needles): bool
     {
         $accesoPer = 0;
-        $permissions = auth()->user()->getPermissionsViaRoles();
+        $permissions = auth()
+            ->user()
+            ->getPermissionsViaRoles();
         // dd($permissions, $needles);
         $accesoPer = false;
         $permissions->filter(function ($haystack) use ($needles, $accesoPer) {
@@ -64,8 +71,9 @@ if (!function_exists('fncHasPermissions')) {
             foreach ($needles as $needle) {
                 // dump(['accesoPer' => $accesoPer, 'needle' => $needle, 'haystack' => $haystack->name]);
                 $accesoPer = \Illuminate\Support\Str::contains($haystack->name, $needle) ? true : $accesoPer;
-                if ($accesoPer)
+                if ($accesoPer) {
                     break;
+                }
             }
             // // dump(['needles' => $needles, 'haystack' => $haystack->name, 'accesoPer' => $accesoPer]);
         });
@@ -77,31 +85,31 @@ if (!function_exists('fncGlob_Files')) {
     // TODO: recursividad en directorios
     function fncGlob_Files($folder, $name = '*', $ext = 'jpg,jpeg,png', $limit = 0, $sec = 0, $recur = false)
     {
-        dump([$folder, $name, $ext, $folder . $name . "." . $ext]);
+        dump([$folder, $name, $ext, $folder . $name . '.' . $ext]);
         if (!is_dir($folder)) {
             die("Invalid directory.\n\n");
         }
 
         // $FILES = glob($folder.$name."."."{$ext}", GLOB_BRACE);
-        $FILES = glob($folder . $name . "." . $ext);
+        $FILES = glob($folder . $name . '.' . $ext);
         // dump($FILES);
-        $set_limit    = 0;
+        $set_limit = 0;
 
         foreach ($FILES as $key => $file) {
-
-            if ($set_limit && ($set_limit == $limit))    break;
+            if ($set_limit && $set_limit == $limit) {
+                break;
+            }
 
             if (filemtime($file) > $sec) {
-
-                $FILE_LIST[$key]['path']    = substr($file, 0, (strrpos($file, "\\") + 1));
-                $array = explode(".", substr($file, (strrpos($file, "\\") + 1)));
-                $FILE_LIST[$key]['name']    = $array[0];
-                $FILE_LIST[$key]['ext']    = $array[1];
-                $FILE_LIST[$key]['filename']    = $file;
+                $FILE_LIST[$key]['path'] = substr($file, 0, strrpos($file, '\\') + 1);
+                $array = explode('.', substr($file, strrpos($file, '\\') + 1));
+                $FILE_LIST[$key]['name'] = $array[0];
+                $FILE_LIST[$key]['ext'] = $array[1];
+                $FILE_LIST[$key]['filename'] = $file;
 
                 // $FILE_LIST[$key]['name']    = substr( $file, ( strrpos( $file, "\\" ) +1 ) );
-                $FILE_LIST[$key]['size']    = filesize($file);
-                $FILE_LIST[$key]['date']    = date('Y-m-d G:i:s', filemtime($file));
+                $FILE_LIST[$key]['size'] = filesize($file);
+                $FILE_LIST[$key]['date'] = date('Y-m-d G:i:s', filemtime($file));
 
                 if ($set_limit > 0) {
                     $set_limit++;
@@ -249,14 +257,16 @@ if (!function_exists('fncChangeNumberFormate')) {
         } elseif (strpos($strNum, '.') > 0) {
             $explode = explode('.', $strNum);
             $float = true;
-        } else
+        } else {
             $implode[] = $strNum;
+        }
 
         if ($float) {
             $implode = implode('.', $explode);
             $num = floatval($implode);
-        } else
+        } else {
             $num = intval($implode);
+        }
 
         // SEGUNDA OPCION
         // if (sizeof($explode) > 1) {
@@ -271,30 +281,168 @@ if (!function_exists('fncChangeNumberFormate')) {
         //     else
         //         $num = (int)$explode;
         // }
-        return ($num);
+        return $num;
     }
 }
 
 if (!function_exists('fncChangeDateFormate')) {
-    function fncChangeDateFormate($strFecha, $formato = "Ymd")
+    function fncChangeDateFormate($strFecha, $formato = 'Ymd')
     {
         $dtz = 'America/Santiago';
-        $DateTimeZone = 'Europe/Paris'; //print_r(DateTimeZone::listIdentifiers());
-        // $date = \Carbon\Carbon::parse($strFecha, $dtz);
+        $DateTimeZone1 = 'Europe/Paris'; //print_r(DateTimeZone1::listIdentifiers());
+
+        //siempre viene como d/m/Y, hay que cambiarlo am/d/Y
         $explode = explode('/', $strFecha);
 
         $implode = implode('/', [$explode[1], $explode[0], $explode[2]]);
-        $date = \Carbon\Carbon::parse(
-            $implode,
-            $DateTimeZone
-        );
+        $date = \Carbon\Carbon::parse($implode, $DateTimeZone1)->format($formato);
+        dump(['strFecha' => $strFecha, 'explode' => $explode, 'implode' => $implode, 'date' => $date]);
         // $strtotime = strtotime($implode);
 
         // dump([$strFecha => $date],);
-        // dump([$strFecha => $date], ['explode' => $explode], ['implode' => $implode], ['strtotime' => $strtotime], ['DateTimeZone' => $DateTimeZone],);
+        // dump([$strFecha => $date], ['explode' => $explode], ['implode' => $implode], ['strtotime' => $strtotime], ['DateTimeZone1' => $DateTimeZone1],);
         // sleep(8);
         return $date;
         // return $date->format($formato);
+    }
+}
+/**
+ * Write code on Method
+ *
+ * @return response()
+ */
+if (!function_exists('fncConvertYmdToMdy')) {
+    function fncConvertYmdToMdy($date)
+    {
+        return Carbon::createFromFormat('Y-m-d', $date)->format('m-d-Y');
+    }
+}
+if (!function_exists('fncConvertStringTodmY')) {
+    function fncConvertStringTodmY($fechaString)
+    {
+        dump(['fechaString' => $fechaString]);
+        // Convierte la fecha a un objeto Carbon
+        $fechaCarbon = Carbon::parse($fechaString, 'd/m/Y');
+        dump(['fechaCarbon' => $fechaCarbon]);
+
+        // Formatea la fecha según tus necesidades
+        $fechaFormateada = $fechaCarbon->format('d/m/Y');
+        dd($fechaFormateada);
+        return $fechaFormateada;
+    }
+}
+
+if (!function_exists('fncConvertStringToYmd')) {
+    function fncConvertStringToYmd($fechaString)
+    {
+        // Convierte la fecha a un objeto DateTime
+        $fecha = DateTime::createFromFormat('d/m/Y', $fechaString);
+
+        // Formatea la fecha en el formato deseado (yyyymmdd)
+        return $fecha->format('Ymd');
+    }
+
+    // // Ejemplo de uso
+    // $fechaOriginal = '25/12/2023';
+    // $fechaConvertida = convertirFecha($fechaOriginal);
+
+    // echo "Fecha original: $fechaOriginal<br>";
+    // echo "Fecha convertida: $fechaConvertida";
+}
+
+/**
+ * Write code on Method
+ *
+ * @return response()
+ */
+if (!function_exists('fncConvertMdyToYmd')) {
+    function fncConvertMdyToYmd($date)
+    {
+        return Carbon::createFromFormat('m-d-Y', $date)->format('Y-m-d');
+    }
+}
+
+/**
+ * Write code on Method
+ *
+ * @return response()
+ */
+if (!function_exists('fncConvertYmdToDmY')) {
+    function fncConvertYmdToDmY($date)
+    {
+        return Carbon::createFromFormat('Y-m-d', $date)->format('d-m-Y');
+    }
+}
+
+// Esta función utiliza la clase DateTime de PHP para validar y convertir las fechas. Si las fechas pueden tener diferentes formatos, la función los comprobará en el orden en que se proporcionen en el arreglo $formats, devuelve el formato udado para todas las fechas
+if (!function_exists('fncDetectCommonDateFormat')) {
+    function fncDetectCommonDateFormat($dateArray, $formats = ['m-d-y', 'd-m-y', 'y-m-d'])
+    {
+        $commonFormat = null;
+        foreach ($dateArray as $date) {
+            foreach ($formats as $format) {
+                var_dump("<br>Probando el formato {$format} con la fecha {$date}\n");
+                $d = DateTime::createFromFormat($format, $date);
+                if ($d === false) {
+                    var_dump("La fecha {$date} no coincide con el formato {$format}\n");
+                } elseif ($d && $d->format($format) == $date) {
+                    var_dump("<br>La fecha {$date} coincide con el formato {$format}\n");
+                    var_dump('<br>Fecha convertida: ' . $d->format('Y-m-d') . "\n"); // Imprime la fecha
+                    if ($commonFormat === null) {
+                        $commonFormat = $format;
+                    } elseif ($commonFormat !== $format) {
+                        $commonFormat = 'No existe un formato común';
+                        break;
+                    }
+                    break;
+                }
+            }
+        }
+        return $commonFormat;
+    }
+}
+
+if (!function_exists('fncTipoCampo')) {
+    function fncTipoCampo($campo, $tipo)
+    {
+        // dump(['fncTipoCampo' => [$campo, $tipo]]);
+        $tipo = explode(',', $tipo);
+        // dump($tipo);
+        switch ($tipo[0]) {
+            case 'string':
+            case 'text':
+                return (string) $campo;
+            case 'int':
+            case 'integer':
+                return (int) $campo;
+            case 'float':
+            case 'decimal':
+                // dd($tipo[1]);
+                // Verificamos si el campo es numérico utilizando una expresión regular
+                if (preg_match('/^-?\d+(\.\d+)?$/', $campo)) {
+                    // Obtenemos la cantidad de decimales (si se especifica)
+                    $decimales = isset($tipoParts[1]) ? (int) $tipoParts[1] : 2;
+                    // Formateamos el número con la cantidad de decimales
+                    return number_format((float) $campo, $decimales, '.', '');
+                } else {
+                    // Si no es numérico, devolvemos el campo original
+                    return $campo;
+                }
+            case 'bool':
+                return (bool) $campo;
+            case 'date':
+                // Intentamos convertir el campo a una fecha
+                $fecha = DateTime::createFromFormat('Y-m-d', $campo);
+                if ($fecha !== false) {
+                    return $fecha->format('Y-m-d'); // Formato deseado para la fecha
+                } else {
+                    // Si no se puede convertir, devolvemos el campo original
+                    return $campo;
+                }
+            default:
+                // Tipo no reconocido, devolvemos el campo original
+                return $campo;
+        }
     }
 }
 
@@ -321,7 +469,7 @@ if (!function_exists('fncCambiaCaracteresEspeciales')) {
     function fncCambiaCaracteresEspeciales($string, array $arreglo = [])
     {
         if (!count($arreglo)) {
-            $arreglo = array(
+            $arreglo = [
                 ['á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä'],
                 ['a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A'],
                 //1
@@ -337,16 +485,17 @@ if (!function_exists('fncCambiaCaracteresEspeciales')) {
                 ['ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü'],
                 ['u', 'u', 'u', 'u', 'U', 'U', 'U', 'U'],
                 //5
-                ['ñ', 'Ñ', 'ç', 'Ç'], ['n', 'N', 'c', 'C'],
+                ['ñ', 'Ñ', 'ç', 'Ç'],
+                ['n', 'N', 'c', 'C'],
                 //6
                 ['|', '!', '·', "$", '%', '&', '/', '(', ')', '?', "'", '¡', '¿', '[', '^', '<code>', ']', '+', '}', '{', '¨', '´', '>', '<', ';', ',', ':', ' ', '"'],
-                ['']
+                [''],
                 //7
-            );
+            ];
         }
         //función para limpiar strings
 
-        for ($i = 0; $i <= (count($arreglo) / 2); $i = $i + 2) {
+        for ($i = 0; $i <= count($arreglo) / 2; $i = $i + 2) {
             $string = str_replace($search = $arreglo[$i], $replace = $arreglo[$i + 1], $subject = $string);
             // dump($i, $string);
         }
@@ -377,27 +526,22 @@ if (!function_exists('fncElimCaracterDuplicado')) {
     function fncElimCaracterDuplicado($str)
     {
         return implode(
-            " ",
-            array_map(
-                function ($palabra) {
-                    preg_match_all('/./u', $palabra, $matches);
-                    return array_reduce(
-                        $matches[0],
-                        function ($acum, $letra) {
-                            return $acum == null || ($acum[-1] != $letra && substr($acum, -2) != $letra) ? $acum . $letra : $acum;
-                        }
-                    );
-                },
-                explode(" ", preg_replace('/\s+/', ' ', $str))
-            )
+            ' ',
+            array_map(function ($palabra) {
+                preg_match_all('/./u', $palabra, $matches);
+                return array_reduce($matches[0], function ($acum, $letra) {
+                    return $acum == null || ($acum[-1] != $letra && substr($acum, -2) != $letra) ? $acum . $letra : $acum;
+                });
+            }, explode(' ', preg_replace('/\s+/', ' ', $str))),
         );
     }
 }
 if (!function_exists('fncTraduccion')) {
     function fncTraduccion($texto_a_traducir, $locale = null)
     {
-        if (is_null($locale))
+        if (is_null($locale)) {
             $locale = session('locale');
+        }
         $traduccion = trans($texto_a_traducir, [], $locale);
         return $traduccion !== $texto_a_traducir ? $traduccion : $texto_a_traducir;
     }
@@ -427,7 +571,7 @@ if (!function_exists('fncConvertirCadenaBytes')) {
     }
 }
 if (!function_exists('fncExplode')) {
-    function fncExplode($line, $separadorCampos = ";", $finLinea = '\r\n')
+    function fncExplode($line, $separadorCampos = ';', $finLinea = '\r\n')
     {
         $fields = [];
         $field = '';
@@ -473,22 +617,19 @@ if (!function_exists('fncBuscaArchivos')) {
         static $mapa;
 
         if (is_dir($path)) {
-
             #Obtener un arreglo con directorios y archivos
             $subdirectorios_o_archivos = scandir($path);
             foreach ($subdirectorios_o_archivos as $subdirectorio_o_archivo) {
-
                 # Omitir . y .., pues son directorios
                 # que se refieren al directorio actual
                 # o al directorio padre
-                if ($subdirectorio_o_archivo != "." && $subdirectorio_o_archivo != "..") {
-
+                if ($subdirectorio_o_archivo != '.' && $subdirectorio_o_archivo != '..') {
                     # Si es un directorio, recursión
-                    if (is_dir($path . "/" . $subdirectorio_o_archivo)) {
-                        fncBuscaArchivos($path . "/" . $subdirectorio_o_archivo, $files, $ext, $exc);
+                    if (is_dir($path . '/' . $subdirectorio_o_archivo)) {
+                        fncBuscaArchivos($path . '/' . $subdirectorio_o_archivo, $files, $ext, $exc);
                     } else {
                         # Si es un archivo, lo eliminamos con unlink
-                        $mapa["$path"] =  $subdirectorio_o_archivo;
+                        $mapa["$path"] = $subdirectorio_o_archivo;
                     }
                 }
             }

@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -155,22 +154,27 @@ return [
     |
     */
 
-    'providers' => ServiceProvider::defaultProviders()->merge([
-        /*
-         * Package Service Providers...
-         */
-        // ... Spatie
-        Spatie\Permission\PermissionServiceProvider::class,
-        /*
-         * Application Service Providers...
-         */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        App\Providers\VoltServiceProvider::class,
-    ])->toArray(),
+    'providers' => ServiceProvider::defaultProviders()
+        ->merge([
+            /*
+             * Package Service Providers...
+             */
+            // ... Spatie
+            Spatie\Permission\PermissionServiceProvider::class,
+            /*
+             * Application Service Providers...
+             */
+            // ... Maatwebsite
+            // Maatwebsite\Excel\ExcelServiceProvider::class,
+            //
+            App\Providers\AppServiceProvider::class,
+            App\Providers\AuthServiceProvider::class,
+            // App\Providers\BroadcastServiceProvider::class,
+            App\Providers\EventServiceProvider::class,
+            App\Providers\RouteServiceProvider::class,
+            App\Providers\VoltServiceProvider::class,
+        ])
+        ->toArray(),
 
     /*
     |--------------------------------------------------------------------------
@@ -183,8 +187,11 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
-    ])->toArray(),
-
+    'aliases' => Facade::defaultAliases()
+        ->merge([
+            // 'Example' => App\Facades\Example::class,
+            // ... Maatwebsite
+            // 'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        ])
+        ->toArray(),
 ];

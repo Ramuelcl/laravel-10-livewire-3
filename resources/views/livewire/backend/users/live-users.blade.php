@@ -1,7 +1,4 @@
 <div class="container">
-    @if (session('messages'))
-        <div class="alert bg-green-300 text-center">{{ session('messages') }}</div>
-    @endif
     {{-- @livewire('live-tabs', ['tabs' => $tabs, 'activeTab' => $activeTab]) --}}
     <div x-data="{ tab: window.location.hash ? window.location.hash : '#listado' }" x-init="tab = '#listado'">
 

@@ -1,18 +1,5 @@
 <div wire:poll.30s>
     <div class="flex justify-between">
-        <!-- list pages -->
-        @if ($onPag)
-            {{-- {{ $xPag ?? null }} --}}
-            <div class="relative m-[2px] mb-3 mr-5 float-left w-1/3">
-                {{-- <x-input-label>Categoría</x-input-label> --}}
-                <x-select1 class="w-1/3" wire:model.live="xPag">
-                    @foreach ($xPags as $xPag)
-                        {{-- @dd($categoria0) --}}
-                        <option value="{{ $xPag }}">{{ $xPag }}</option>
-                    @endforeach
-                </x-select1>
-            </div>
-        @endif
         <!-- Search input -->
         @if ($onSearch)
             @livewire('live-search')
@@ -26,6 +13,7 @@
         @endif
         <!-- select only actives -->
         @if ($onAgregar)
+            <x-tw_button click="{{ $this->TabForm(1) }}">Agregar</x-tw_button>
             <x-button rounded primary label="Agregar" icon="plus" wire:click="{{ $this->TabForm(1) }}" />
         @endif
     </div>
@@ -93,7 +81,20 @@
         <!-- Table footer -->
         <tfoot class="border-t-2 dark:border-neutral-600">
             <tr>
-                <td></td>
+
+                <td>
+                    <!-- list pages -->
+                    @if ($onPag)
+                        {{-- {{ $xPag ?? null }} --}}
+                        <div class="relative m-[2px] mb-3 mr-5 float-left w-1/3">
+                            <x-tw_select name="xPag" class="w-[100px]" wire:model.live="xPag">
+                                @foreach ($xPags as $xPag)
+                                    <option value="{{ $xPag }}">{{ $xPag }}</option>
+                                @endforeach
+                            </x-tw_select>
+                        </div>
+                    @endif
+                </td>
                 <td class="px-6 py-2 border-x dark:border-neutral-600">{{ $this->users->links() }}
                 </td>
             </tr>
