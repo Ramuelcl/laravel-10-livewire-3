@@ -22,6 +22,8 @@ class clsFileReader
     {
         $this->filePath = $filePath;
         $this->determinarOpcionesPorDefecto();
+        $paso = $this->open($this->filePath);
+        dd($this, $paso);
     }
 
     public function setConfig($cnf)
@@ -83,7 +85,7 @@ class clsFileReader
     public function letLineaEncabezado($valor = 0)
     {
         // Leer el archivo línea por línea
-        $paso = $this->open($filePath);
+        $paso = $this->open($this->filePath);
         dd($this, $paso);
         for ($i = 0; $i < 10; $i++) {
             $haystack = $this->readLines();
