@@ -11,7 +11,7 @@
 ])
 {{-- resources\views\components\tw_checkbox.blade.php --}}
 @if (!$name)
-    <div class="text-red-500">El nombre es nulo en tw_checkbox.</div>
+    <div class="text-red-500">El nombre es nulo en tw_checkbox</div>
 @else
     <div @class(['flex items-center', $class])>
         @if ($label)
